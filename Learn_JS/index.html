@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Demo Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="Style.css">
+</head>
+
+<body>
+    <header>
+        <div class="navbar">
+            <div class="navbar-left">
+                <div class="logo">
+                    <img src="https://www.freepnglogos.com/uploads/apple-logo-png/apple-logo-png-dallas-shootings-don-add-are-speech-zones-used-4.png"
+                        alt="Logo">
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#">Trang chủ</a></li>
+                        <li><a href="#">Giới thiệu</a></li>
+                        <li><a href="#">Dịch vụ</a></li>
+                        <li><a href="#">Liên hệ</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="navbar-right">
+                <div class="auth-buttons">
+                    <a href="#">Đăng nhập </a> | <a href="#">Đăng ký</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="overlay">
+            <div class="hero-text">
+                <h1 style="color: rgb(97, 187, 119);">Chào mừng đến với Website</h1>
+                <p style="color: yellow;">Web cung cấp về dịch vụ test JavaScript</p>
+                <form id="searchForm">
+                    <input type="text" id="searchInput" placeholder="Từ khóa...">
+                    <button type="submit">Tìm kiếm</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <section class="example-section">
+        <h1>Ví dụ về nút bấm</h1>
+        <p>----------Ví dụ -----------------</p>
+        <div class="style-button">
+            <button class="one">Nút bấm 1 </button>
+            <button class="two">Nút bấm 2 </button>
+            <button class="three">Nút bấm 3 </button>
+            <button class="four">Nút bấm 4 </button>
+        </div>
+    </section>
+
+    <section class="contact-section">
+        <h1>Liên hệ</h1>
+        <p>Hãy để lại thông tin liên hệ cho chúng tôi </p>
+        <form id="contactForm">
+            <input type="text" id="name" placeholder="Họ và Tên" required>
+            <input type="email" id="email" placeholder=" Email" required>
+            <textarea id="message" placeholder="Lời nhắn" required></textarea>
+            <button type="submit">Gửi đi</button>
+        </form>
+        <div class="message" id="successMessage">Cảm ơn bạn đã để lại thông tin !</div>
+        <h2>Xác nhận thông tin nhập từ người dùng:</h2>
+        <p id="displayName">Name: </p>
+        <p id="displayEmail">Email: </p>
+        <p id="displayMessage">Message: </p>
+        <div class="loading" id="loadingSpinner">Loading...</div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Demo Website Have JavaScript. All Dev by ToanLv.</p>
+    </footer>
+
+    <script>
+        // lấy id = searchform và đăng lý sự kiện cho submit
+        document.getElementById('searchForm').addEventListener('submit', function (e) {
+            // bỏ việc mặc định của nút submit là load lại trang
+            e.preventDefault();
+            alert('Từ khóa bạn nhập là : ' + document.getElementById('searchInput').value);
+        });
+        // Chọn tất cả các nút (button) bên trong phần tử có lớp .style-button.
+        document.querySelectorAll('.style-button button').forEach(function (button) {
+            button.addEventListener('click', function () {
+                alert('Bạn nhấn ' + this.textContent + ' clicked!');
+            });
+        });
+
+
+        document.getElementById('contactForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+            const successMessage = document.getElementById('successMessage');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+
+            loadingSpinner.style.display = 'block';
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', 'https://jsonplaceholder.typicode.com/posts/1', true);
+            xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+                    loadingSpinner.style.display = 'none';
+                    successMessage.style.display = 'block';
+                    setTimeout(() => {
+                        successMessage.style.display = 'none';
+                    }, 5000);
+                    document.getElementById('displayName').textContent = 'Name: ' + name;
+                    document.getElementById('displayEmail').textContent = 'Email: ' + email;
+                    document.getElementById('displayMessage').textContent = 'Message: ' + message;
+                }
+            };
+            xhr.send(JSON.stringify({
+                name: name,
+                email: email,
+                message: message
+            }));
+        });
+    </script>
+</body>
+
+</html>
+<!-- && xhr.status == 201 -->
+<!-- 
+0 (UNSENT): Đối tượng XMLHttpRequest đã được tạo, nhưng chưa gọi open().
+1 (OPENED): open() đã được gọi, nhưng chưa gửi yêu cầu (send() chưa được gọi).
+2 (HEADERS_RECEIVED): Yêu cầu đã được gửi và tiêu đề phản hồi đã được nhận.
+3 (LOADING): Phản hồi đang được nhận. Dữ liệu có thể đang được tải về.
+4 (DONE): Phản hồi đã hoàn tất. Toàn bộ dữ liệu đã được nhận.
+-->
+
+<!-- 
+200: OK (Yêu cầu thành công và phản hồi có thể được xử lý).
+201: Created (Yêu cầu đã thành công và một tài nguyên mới đã được tạo).
+400: Bad Request (Yêu cầu không hợp lệ hoặc thiếu thông tin cần thiết).
+404: Not Found (Tài nguyên không được tìm thấy trên máy chủ).
+500: Internal Server Error (Lỗi từ phía máy chủ).
+-->
